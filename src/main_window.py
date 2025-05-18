@@ -2,11 +2,10 @@ import json
 import pickle
 import random
 from PySide6 import QtWidgets, QtCore
-from .SideBar.sidebar import MenuBar
-from .ConversationArea.conversation_area import ConversationArea
 import uuid
 import datetime
-from functions import clean_text
+from .input import Input
+from .output import Output
 
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self, app):
@@ -15,19 +14,18 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setWindowTitle("Starbuck Chatbot")
         self.resize(1000, 600)
         
-        self.load_packages()
-        
         container = QtWidgets.QWidget()
         self.setCentralWidget(container)
-        layout = QtWidgets.QHBoxLayout(container)
+        
+        self.input_section = Input(self)
+        self.output_section = Output(self)
+        self.input_section.file_selected.connect(self.output_section.check_path)
+        
+        layout = QtWidgets.QVBoxLayout(container)
         layout.setContentsMargins(5, 5, 5, 5)
-
         layout.setSpacing(10)
-
-        # layout.addWidget(self.menu_bar, 1)
+        layout.addWidget(self.input_section, 1)
+        layout.addWidget(self.output_section, 9)
     
-    def load_packages(self):
-        pass
-
 
         
