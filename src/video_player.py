@@ -74,7 +74,8 @@ class VideoPlayer(QtWidgets.QFrame):
             cap = cv2.VideoCapture(self.path)
             # Get original video properties
             fps = cap.get(cv2.CAP_PROP_FPS)
-            width, height = 3840, 1200
+            width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+            height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
             fourcc = cv2.VideoWriter_fourcc(*'mp4v')
             out = cv2.VideoWriter(output_path, fourcc, fps, (width, height))
             total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
@@ -91,7 +92,7 @@ class VideoPlayer(QtWidgets.QFrame):
                     annotated = results.ims[0] if hasattr(results, "ims") else results.imgs[0]
 
                     # Resize to match output video resolution
-                    annotated_resized = cv2.resize(annotated, (3840, 1200))
+                    annotated_resized = cv2.resize(annotated, (width, height))
                     out.write(annotated_resized)
                     
                     current_frame += 1
